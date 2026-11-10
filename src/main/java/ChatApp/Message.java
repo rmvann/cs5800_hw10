@@ -46,6 +46,13 @@ public class Message {
         }
     }
 
+    public List<String> getRecipients() {
+        return recipients;
+    }
+    public String getSender() {
+        return sender;
+    }
+
     @Override
     public String toString() {
         return String.format(

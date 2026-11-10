@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ChatServer {
-    private Map<String, User> users = new HashMap<>();
+    private final Map<String, User> users = new HashMap<>();
 
     public void registerUser(String username){
         if(users.containsKey(username)){
@@ -12,7 +12,7 @@ public class ChatServer {
             return;
         }
         else{
-            users.put(username, new User(username));
+            users.put(username, new User(username, this));
             System.out.println(username + " successfully registered");
         }
     }
@@ -27,7 +27,18 @@ public class ChatServer {
         }
     }
 
-    public void sendMessage(String message){
+    public boolean sendMessage(Message message){
+        for (String recipient: message.getRecipients()){
+            if (!users.containsKey(recipient)){
+                System.err.println("User "+recipient+" not found");
+                return false;
+            }
+        }
 
+        for (String recipient: message.getRecipients()){
+            users.get(recipient).receiveMessage(message);
+        }
+
+        return true;
     }
 }
