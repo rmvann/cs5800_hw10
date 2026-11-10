@@ -49,11 +49,22 @@ public class User implements IterableByUser {
     }
 
     public void showHistoryWith(String otherUser){
-        chatHistories.get(otherUser).showHistory();
+        ChatHistory chatHistory = chatHistories.get(otherUser);
+
+        if (chatHistory == null) {
+            System.out.println("No conversation history with " + otherUser);
+            return;
+        }
+
+        chatHistory.showHistory();
     }
 
     public String getUsername() {
         return username;
+    }
+
+    public void block(String blockUser){
+        chatServer.blockUser(username, blockUser);
     }
 
     @Override

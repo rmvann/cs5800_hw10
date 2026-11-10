@@ -52,5 +52,14 @@ public class ChatAppDriver {
         while (iterator.hasNext()) {
             System.out.println(iterator.next());
         }
+
+        System.out.println("----Blocking----");
+        annie.block("xX_Darkness_Xx");
+        sheldon.sendMessage("your ip address is 127.0.0.1", List.of("annie", "robert22"));
+
+        System.out.println("sheldon and annie");
+        annie.showHistoryWith("xX_Darkness_Xx");
+        System.out.println("sheldon and robert");
+        robert.showHistoryWith("xX_Darkness_Xx");
     }
 }

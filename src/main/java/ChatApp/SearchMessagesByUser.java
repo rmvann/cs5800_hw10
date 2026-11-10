@@ -25,7 +25,7 @@ public class SearchMessagesByUser implements Iterator<Message> {
         while (messages.hasNext()) {
             Message message = messages.next();
 
-            if (message.getSender().equals(username) || message.getRecipients().contains(username)) {
+            if (message.getSender().equals(username) ||     message.getRecipients().contains(username)) {
 
                 nextMessage = message;
                 ready = true;

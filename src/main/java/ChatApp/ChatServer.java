@@ -1,10 +1,10 @@
 package ChatApp;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ChatServer {
     private final Map<String, User> users = new HashMap<>();
+    private final Map<String, Set<String>> blockedUsers = new HashMap<>();
 
     public User registerUser(String username){
         if(users.containsKey(username)){
@@ -14,6 +14,7 @@ public class ChatServer {
         else{
             User u = new User(username, this);
             users.put(username, u);
+            blockedUsers.put(username, new HashSet<>());
             System.out.println(username + " successfully registered");
             return u;
         }
@@ -25,6 +26,7 @@ public class ChatServer {
         }
         else{
             users.remove(username);
+            blockedUsers.remove(username);
             System.out.println(username + " successfully unregistered");
         }
     }
@@ -38,6 +40,10 @@ public class ChatServer {
         }
 
         for (String recipient: message.getRecipients()){
+            if (blockedUsers.get(recipient).contains(message.getSender())){
+                System.out.println("Message not sent to "+recipient+", because you are blocked");
+                continue;
+            }
             users.get(recipient).receiveMessage(message);
         }
 
@@ -46,5 +52,10 @@ public class ChatServer {
 
     public void undoMessage(String sender, String recipient){
         users.get(recipient).undoReceivedMessage(sender);
+    }
+
+    // you can never unblock someone
+    public void blockUser(String username, String blockedUser){
+        blockedUsers.get(username).add(blockedUser);
     }
 }
