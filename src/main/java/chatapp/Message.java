@@ -1,6 +1,5 @@
-package ChatApp;
+package chatapp;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -63,6 +62,7 @@ public class Message {
     public String getSender() {
         return sender;
     }
+    public String getContent() { return content; }
 
     @Override
     public String toString() {

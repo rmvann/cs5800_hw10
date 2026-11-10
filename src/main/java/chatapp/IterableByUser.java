@@ -1,4 +1,4 @@
-package ChatApp;
+package chatapp;
 
 import java.util.Iterator;
 
