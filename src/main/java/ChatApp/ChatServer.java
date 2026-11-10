@@ -6,14 +6,16 @@ import java.util.Map;
 public class ChatServer {
     private final Map<String, User> users = new HashMap<>();
 
-    public void registerUser(String username){
+    public User registerUser(String username){
         if(users.containsKey(username)){
             System.err.println("Username already exists");
-            return;
+            return null;
         }
         else{
-            users.put(username, new User(username, this));
+            User u = new User(username, this);
+            users.put(username, u);
             System.out.println(username + " successfully registered");
+            return u;
         }
     }
 
@@ -40,5 +42,9 @@ public class ChatServer {
         }
 
         return true;
+    }
+
+    public void undoMessage(String sender, String recipient){
+        users.get(recipient).undoReceivedMessage(sender);
     }
 }

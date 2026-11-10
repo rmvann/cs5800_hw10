@@ -44,6 +44,17 @@ public class Message {
         public String getContent() {
             return content;
         }
+
+        @Override
+        public String toString() {
+            return String.format(
+                    "[%s] %s -> %s: %s",
+                    timestamp,
+                    sender,
+                    String.join(", ", recipients),
+                    content
+            );
+        }
     }
 
     public List<String> getRecipients() {

@@ -1,13 +1,13 @@
 package ChatApp;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class User {
-    private Message.MessageMemento lastMessage;
+    private final Map<String, Message.MessageMemento> lastMessages = new HashMap<>();
     private final String username; // usernames are unique
-    private final HashMap<String, ChatHistory> chatHistories = new HashMap<>();
+    private final Map<String, ChatHistory> chatHistories = new HashMap<>();
     private ChatServer chatServer;
 
     public User(String username, ChatServer chatServer){
@@ -19,24 +19,35 @@ public class User {
         Message message = new Message(content, username, recipients);
         if (!chatServer.sendMessage(message)) return;
 
-        lastMessage = message.snapshot();
         for (String recipient : recipients){
+            lastMessages.put(recipient, message.snapshot());
+
             if (!chatHistories.containsKey(recipient)) chatHistories.put(recipient, new ChatHistory());
             chatHistories.get(recipient).addMessage(message);
         }
     }
 
     public void receiveMessage(Message message){
+        if(!chatHistories.containsKey(message.getSender())) chatHistories.put(message.getSender(), new ChatHistory());
         chatHistories.get(message.getSender()).addMessage(message);
     }
 
-    public void undoMessage(){
-        if(lastMessage == null){
+    public void undoMessageWith(String recipient){
+        if(!lastMessages.containsKey(recipient)){
             System.err.println("No message to undo");
             return;
         }
 
-        lastMessage = null;
+        chatHistories.get(recipient).undoLastMessage();
+        System.out.println("Removed message: "+lastMessages.get(recipient));
+        lastMessages.remove(recipient);
+
+        chatServer.undoMessage(username, recipient);
+    }
+
+    public void undoReceivedMessage(String sender){
+        chatHistories.get(sender).undoLastMessage();
+        System.out.println("Received message deleted");
     }
 
     public void showHistoryWith(String otherUser){
