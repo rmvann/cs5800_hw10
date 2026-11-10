@@ -2,8 +2,9 @@ package ChatApp;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Iterator;
 
-public class ChatHistory {
+public class ChatHistory implements IterableByUser {
     private final Deque<Message> messageHistory = new ArrayDeque<>();
 
     public void addMessage(Message message){
@@ -18,5 +19,10 @@ public class ChatHistory {
 
     public void undoLastMessage(){
         messageHistory.removeLast();
+    }
+
+    @Override
+    public Iterator<Message> iterator(User userToSearchWith) {
+        return new SearchMessagesByUser(messageHistory.iterator(), userToSearchWith);
     }
 }

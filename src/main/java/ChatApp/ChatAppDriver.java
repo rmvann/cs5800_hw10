@@ -1,5 +1,6 @@
 package ChatApp;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class ChatAppDriver {
@@ -43,5 +44,13 @@ public class ChatAppDriver {
 
         System.out.println("annie and robert");
         annie.showHistoryWith("robert22");
+
+        System.out.println("----Iterator for annie & robert----");
+
+        Iterator<Message> iterator = annie.iterator(robert);
+
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
+        }
     }
 }

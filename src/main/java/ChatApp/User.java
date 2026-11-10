@@ -1,10 +1,8 @@
 package ChatApp;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class User {
+public class User implements IterableByUser {
     private final Map<String, Message.MessageMemento> lastMessages = new HashMap<>();
     private final String username; // usernames are unique
     private final Map<String, ChatHistory> chatHistories = new HashMap<>();
@@ -56,5 +54,14 @@ public class User {
 
     public String getUsername() {
         return username;
+    }
+
+    @Override
+    public Iterator<Message> iterator(User userToSearchWith) {
+        ChatHistory chatHistory = chatHistories.get(userToSearchWith.getUsername());
+
+        if (chatHistory == null) return Collections.emptyIterator();
+
+        return chatHistory.iterator(userToSearchWith);
     }
 }
